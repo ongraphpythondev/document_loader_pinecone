@@ -2,10 +2,14 @@ import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from streamlit_extras.add_vertical_space import add_vertical_space
+from langchain.document_loaders import UnstructuredFileLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.vectorstores import FAISS
 from langchain.llms import OpenAI
+from langchain import PromptTemplate, LLMChain
 from langchain.chains.question_answering import load_qa_chain
+from langchain.embeddings import HuggingFaceEmbeddings
 import pinecone 
 from langchain.callbacks import get_openai_callback
 import os
@@ -148,6 +152,11 @@ def main():
                     print(query)
                     docs = docsearch.similarity_search(query,k=3)
                     print(docs)
+                # st.write(docs[0].page_content)
+                # docs = VectorStore.similarity_search(query=query, k=3)
+
+                
+                
 
                     with get_openai_callback() as cb:
                         response = chain.run(input_documents=docs, question=query)
